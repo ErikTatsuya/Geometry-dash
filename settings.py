@@ -9,7 +9,7 @@ ASSETS_DIR = BASE_DIR / "assets"
 WIDTH, HEIGHT = 800, 600
 FPS = 60
 TILE_SIZE = 40
-GRAVITY = 0.28
+GRAVITY = 0.35
 
 BG_COLOR = (10, 15, 35)       
 UI_BG = (25, 30, 50)          

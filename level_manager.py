@@ -8,11 +8,20 @@ class LevelManager:
             os.makedirs(os.path.join(self.base, f), exist_ok=True)
 
     def save(self, name, objects_dict, metadata, folder="custom"):
-        # Converte {(x,y): "id,sub"} em lista para JSON
         obj_list = []
         for (x, y), val in objects_dict.items():
-            parts = val.split(',')
-            obj_list.append({"id": parts[0], "x": x, "y": y, "type": parts[2] if len(parts)>2 else None})
+            if isinstance(val, dict):
+                obj = {"id": val["id"], "x": x, "y": y}
+                if val.get("type"):
+                    obj["type"] = val["type"]
+                if val.get("rotation", 0):
+                    obj["rotation"] = val["rotation"] % 360
+            else:
+                parts = val.split(',')
+                obj = {"id": parts[0], "x": x, "y": y}
+                if len(parts) > 1 and parts[1]:
+                    obj["type"] = parts[1]
+            obj_list.append(obj)
         
         data = {"metadata": metadata, "objects": obj_list}
         with open(f"{self.base}/{folder}/{name}.json", 'w') as f:
