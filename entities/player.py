@@ -4,42 +4,55 @@ from settings import *
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.mode = "cube"
-        self.image = IMAGES['cube']
+        self.original_image = IMAGES['cube']
+        self.image = self.original_image.copy()
         self.rect = self.image.get_rect(topleft=(100, 450))
+        
+        # Física
         self.vel_y = 0
-        self.gravity_dir = 1
+        self.gravity_dir = 1 # 1 normal, -1 invertida
         self.on_ground = False
+        self.mode = "cube" # cube, ship, wave
+        self.angle = 0
 
     def update(self):
         keys = pygame.key.get_pressed()
-        clicked = keys[pygame.K_SPACE] or pygame.mouse.get_pressed()[0]
+        mouse = pygame.mouse.get_pressed()
+        jump_input = keys[pygame.K_SPACE] or keys[pygame.K_UP] or mouse[0]
 
+        # Gravidade e Pulo
         if self.mode == "cube":
-            self.vel_y += GRAVITY * self.gravity_dir
-            if clicked and self.on_ground:
-                self.vel_y = -9 * self.gravity_dir
+            if self.on_ground and jump_input:
+                self.vel_y = -8 * self.gravity_dir
                 self.on_ground = False
-            self.image = IMAGES['cube']
+            
+            self.vel_y += GRAVITY * self.gravity_dir
+            self.rect.y += self.vel_y
+
+            # Rotação do Cubo (Corrigida para não pulsar)
+            if not self.on_ground:
+                self.angle -= 6 * self.gravity_dir
+                self.image = pygame.transform.rotate(self.original_image, self.angle)
+                self.rect = self.image.get_rect(center=self.rect.center)
+            else:
+                # Alinha o cubo ao chão
+                self.angle = 0
+                self.image = self.original_image
+                self.rect = self.image.get_rect(center=self.rect.center)
 
         elif self.mode == "ship":
-            self.vel_y += (GRAVITY * 0.4) * self.gravity_dir
-            if clicked:
-                self.vel_y -= 0.7 * self.gravity_dir
-            self.image = IMAGES['ship']
-
-        elif self.mode == "wave":
-            speed = 6 * self.gravity_dir
-            self.vel_y = -speed if clicked else speed
-            self.image = IMAGES['wave']
-
-        # Limitar velocidade terminal
-        terminal_speed = 15
-        if abs(self.vel_y) > terminal_speed:
-            if self.vel_y > 0:
-                self.vel_y = terminal_speed
+            if jump_input:
+                self.vel_y -= 0.5 * self.gravity_dir
             else:
-                self.vel_y = -terminal_speed
+                self.vel_y += 0.3 * self.gravity_dir
             
-        self.rect.y += self.vel_y
-        self.on_ground = False
+            # Limite de velocidade da nave
+            self.vel_y = max(-6, min(6, self.vel_y))
+            self.rect.y += self.vel_y
+            
+            # Inclinação da nave
+            self.angle = -self.vel_y * 4
+            self.image = pygame.transform.rotate(IMAGES['ship'], self.angle)
+            self.rect = self.image.get_rect(center=self.rect.center)
+
+        self.on_ground = False # Reset para checagem de colisão no main

@@ -1,62 +1,58 @@
 import pygame
-from settings import IMAGES
+from settings import IMAGES, TILE_SIZE
 
 class Block(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        # Usa a imagem block_solid.png redimensionada no settings
         self.image = IMAGES['block']
+        self.rect = self.image.get_rect(topleft=(x, y))
+
+class Spike(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = IMAGES['spike']
+        self.rect = self.image.get_rect(topleft=(x, y))
+        self.mask = pygame.mask.from_surface(self.image)
+
+class Saw(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.orig = IMAGES['saw']
+        self.image = self.orig.copy()
+        self.rect = self.image.get_rect(center=(x + TILE_SIZE//2, y + TILE_SIZE//2))
+        self.angle = 0
+    def update(self):
+        self.angle += 8
+        self.image = pygame.transform.rotate(self.orig, self.angle)
+        self.rect = self.image.get_rect(center=self.rect.center)
+
+class Portal(pygame.sprite.Sprite):
+    def __init__(self, x, y, p_type):
+        super().__init__()
+        self.type = p_type
+        mapping = {"s": 'p_ship', "w": 'p_wave', "c": 'p_cube', "gi": 'p_grav', "gn": 'p_grav'}
+        self.image = IMAGES.get(mapping.get(p_type, 'p_ship'), IMAGES['p_ship'])
         self.rect = self.image.get_rect(topleft=(x, y))
 
 class Slope(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        # Usa a imagem slope.png
         self.image = IMAGES['slope']
         self.rect = self.image.get_rect(topleft=(x, y))
-        # Máscara para colisões precisas em rampas (opcional para o motor atual)
+        # Máscara para colisão precisa em rampa
         self.mask = pygame.mask.from_surface(self.image)
 
-class Spike(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+# Adicionando Orbs e Pads para evitar erros futuros
+class Orb(pygame.sprite.Sprite):
+    def __init__(self, x, y, orb_type="y"):
         super().__init__()
-        # Usa a imagem spike.png
-        self.image = IMAGES['spike']
-        self.rect = self.image.get_rect(topleft=(x, y))
-        # Define a máscara para evitar mortes injustas por encostar no vazio do PNG
-        self.mask = pygame.mask.from_surface(self.image)
+        self.type = orb_type
+        self.image = IMAGES.get('orb_y', pygame.Surface((30,30)))
+        self.rect = self.image.get_rect(center=(x + TILE_SIZE//2, y + TILE_SIZE//2))
 
-class Portal(pygame.sprite.Sprite):
-    def __init__(self, x, y, p_type):
+class Pad(pygame.sprite.Sprite):
+    def __init__(self, x, y, pad_type="y"):
         super().__init__()
-        self.type = p_type  # s, w, c, gi, gn
-        
-        # Mapeamento para garantir que cada tipo use seu respectivo asset
-        portal_map = {
-            "s":  IMAGES['p_ship'],
-            "w":  IMAGES['p_wave'],
-            "c":  IMAGES['p_cube'],
-            "gi": IMAGES['p_grav'],  # Gravidade Inversa
-            "gn": IMAGES['p_grav']   # Gravidade Normal
-        }
-        
-        # Seleciona a imagem baseada no tipo; se não achar, usa ship como padrão
-        self.image = portal_map.get(p_type, IMAGES['p_ship'])
-        self.rect = self.image.get_rect(topleft=(x, y))
-
-class Saw(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__()
-        # Salva a imagem original para evitar distorção ao rotacionar
-        self.original_image = IMAGES['saw']
-        self.image = self.original_image.copy()
-        self.rect = self.image.get_rect(center=(x, y))
-        self.angle = 0
-
-    def update(self):
-        # Faz a serra girar constantemente
-        self.angle += 10
-        self.image = pygame.transform.rotate(self.original_image, self.angle)
-        # Recalcula o rect mantendo o centro para o giro não "sambalear"
-        center = self.rect.center
-        self.rect = self.image.get_rect(center=center)
+        self.type = pad_type
+        self.image = IMAGES.get('pad_y', pygame.Surface((40,15)))
+        self.rect = self.image.get_rect(midbottom=(x + TILE_SIZE//2, y + TILE_SIZE))
