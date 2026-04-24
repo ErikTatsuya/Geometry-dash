@@ -60,13 +60,28 @@ class Portal(pygame.sprite.Sprite):
         super().__init__()
         self.type = p_type
         self.rotation = rotation % 360
-        mapping = {"s": "p_ship", "w": "p_wave", "c": "p_cube", "gi": "p_grav", "gn": "p_grav"}
-        base_image = IMAGES.get(mapping.get(p_type, "p_ship"), IMAGES["p_ship"])
+        mapping = {
+            "s": "p_ship",
+            "w": "p_wave",
+            "c": "p_cube",
+            "u": "p_ufo",
+
+            "g_up": "p_grav_up",
+            "g_down": "p_grav_down"
+        }
+
+        img_key = mapping.get(p_type, p_type)
+        base_image = IMAGES[img_key]
+
         self.image = rotate_surface(base_image, self.rotation)
         self.rect = self.image.get_rect(topleft=(x, y))
-        w = TILE_SIZE if self.rotation in (90, 270) else max(10, self.rect.width - 12)
-        h = max(20, self.rect.height - 20) if self.rotation in (0, 180) else TILE_SIZE
-        self.portal_hitbox = pygame.Rect(x + 6, y + 10, w, h)
+
+        self.portal_hitbox = self.rect.inflate(-10, -10)
+
+    def update(self):
+        pass
+
+
 
 
 class Slope(pygame.sprite.Sprite):
