@@ -2,7 +2,9 @@
     "metadata": {
         "name": "samuel.gd",
         "description": "um level mt bom",
-        "music": "lunar abyss"
+        "best_run": 0,
+        "music": "lunar abyss",
+        "dificulty": "normal"
     },
     "objects": [
         {

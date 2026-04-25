@@ -1,6 +1,10 @@
 {
     "metadata": {
-        "name": "slow_center"
+        "name": "Slow center",
+        "description": "Initial level, enjoy :)",
+        "best_run": 0,
+        "music": "put_a_music.mp3",
+        "dificulty": "easy"
     },
     "objects": [
         {
