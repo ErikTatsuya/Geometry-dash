@@ -9,7 +9,9 @@ class LevelInfoScene(Scene):
         self.font = pygame.font.SysFont(None, 50)
         self.small_font = pygame.font.SysFont(None, 35)
 
-        self.level = level["data"]["metadata"]
+        # dados do level
+        self.level_path = level["path"]
+        self.metadata = level["data"]["metadata"]
 
         # caixa central
         self.box_rect = pygame.Rect(150, 160, 500, 300)
@@ -20,21 +22,23 @@ class LevelInfoScene(Scene):
     def handle_events(self, events):
         for event in events:
 
+            # voltar
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     from scenes.main_levels import MainLevelsScene
                     self.manager.set_scene(MainLevelsScene(self.manager))
 
+            # clicar PLAY
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if self.play_button.collidepoint(event.pos):
-                    print("Iniciar level:", self.level["name"])
-                    # aqui depois você coloca a scene de gameplay
+                    from scenes.game_scene import GameScene
+                    self.manager.set_scene(GameScene(self.manager, self.level_path))
 
     def draw(self, screen):
-        screen.fill((0, 0, 0))
+        screen.fill(BLACK)
 
         # título
-        title_surf = self.font.render(self.level["name"], True, WHITE)
+        title_surf = self.font.render(self.metadata["name"], True, WHITE)
         title_rect = title_surf.get_rect(center=(MIDDLE_X, 100))
         screen.blit(title_surf, title_rect)
 
@@ -42,13 +46,13 @@ class LevelInfoScene(Scene):
         pygame.draw.rect(screen, (30, 30, 30), self.box_rect, border_radius=10)
         pygame.draw.rect(screen, WHITE, self.box_rect, 2, border_radius=10)
 
-        # infos dentro da caixa
+        # infos
         y = self.box_rect.top + 40
 
         lines = [
-            f"Desc: {self.level['description']}",
-            f"Best: {self.level['best_run']}",
-            f"Difficulty: {self.level['dificulty']}"
+            f"Desc: {self.metadata['description']}",
+            f"Best: {self.metadata['best_run']}",
+            f"Difficulty: {self.metadata['dificulty']}"
         ]
 
         for line in lines:
@@ -57,7 +61,7 @@ class LevelInfoScene(Scene):
             screen.blit(surf, rect)
             y += 50
 
-        # botão PLAY
+        # botão PLAY (hover)
         mouse_pos = pygame.mouse.get_pos()
 
         if self.play_button.collidepoint(mouse_pos):
@@ -70,7 +74,6 @@ class LevelInfoScene(Scene):
 
         play_surf = self.small_font.render("PLAY", True, WHITE)
         play_rect = play_surf.get_rect(center=self.play_button.center)
-
         screen.blit(play_surf, play_rect)
 
         # voltar

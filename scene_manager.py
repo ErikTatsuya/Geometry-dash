@@ -10,7 +10,7 @@ class SceneManager:
             self.scene.handle_events(events)
 
     def update(self):
-        if self.scene:
+        if self.scene and hasattr(self.scene, "update"):
             self.scene.update()
 
     def draw(self, screen):

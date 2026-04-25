@@ -18,6 +18,7 @@ def load_levels(levels_path):
 
                 levels.append({
                     "file": file,
+                    "path": levels_path / path,
                     "data": data
                 })
 

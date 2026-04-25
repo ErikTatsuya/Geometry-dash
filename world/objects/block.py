@@ -1,18 +1,23 @@
 import pygame
-from settings import *
-from world.grid import grid_to_world, GRID_SIZE
+from settings import TILE_SIZE, ASSETS_DIR
 
 class Block:
-    def __init__(self, x, y, rotation=0):
-        self.grid_x = x
-        self.grid_y = y
+    def __init__(self, grid_x, grid_y, image_path, rotation=0):
+
+        self.x = grid_x * TILE_SIZE
+        self.y = grid_y * TILE_SIZE
+
+        self.rect = pygame.Rect(self.x, self.y, TILE_SIZE, TILE_SIZE)
+
+        full_path = ASSETS_DIR / image_path
+
+        self.image = pygame.image.load(str(full_path)).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (TILE_SIZE, TILE_SIZE))
+
         self.rotation = rotation
-
-        # posição em pixels
-        self.x, self.y = grid_to_world(x, y)
-
-        # hitbox sólida
-        self.rect = pygame.Rect(self.x, self.y, GRID_SIZE, GRID_SIZE)
 
     def update(self):
         pass
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
