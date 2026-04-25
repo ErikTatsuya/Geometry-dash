@@ -1,7 +1,7 @@
 import pygame
 from settings import *
 from world.grid import GRID_SIZE
-from .base_mode import BaseMode
+from .base import BaseMode
 
 class CubeMode(BaseMode):
     def __init__(self, player):

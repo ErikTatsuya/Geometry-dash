@@ -1,4 +1,4 @@
-from player.gamemodes.cube import CubeMode
+from gameplay.player.gamemodes.cube import CubeMode
 
 class Player:
     def __init__(self, x, y):

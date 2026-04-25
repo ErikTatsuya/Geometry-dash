@@ -1,13 +1,6 @@
 import pygame
-import sys
-from pathlib import Path
-
-# garante raiz do projeto no path
-BASE_DIR = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(BASE_DIR))
-
-from player.player import Player
-from settings import ASSETS_DIR, BLACK
+from gameplay.player.player import Player
+from settings import *
 
 class LevelController:
     def __init__(self, level):
