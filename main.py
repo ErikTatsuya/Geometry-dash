@@ -2,6 +2,10 @@ import pygame
 from settings import *
 from scene_manager import SceneManager
 from scenes.main_menu import MainMenuScene
+import os
+
+
+print("DIR ATUAL:", os.getcwd())
 
 pygame.init()
 pygame.font.init()

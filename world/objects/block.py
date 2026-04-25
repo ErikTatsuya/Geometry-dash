@@ -19,5 +19,5 @@ class Block:
     def update(self):
         pass
 
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
+    def draw(self, screen, camera_x):
+        screen.blit(self.image, (self.rect.x - camera_x, self.rect.y))
