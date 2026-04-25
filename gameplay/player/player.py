@@ -1,10 +1,12 @@
 from gameplay.player.gamemodes.cube import CubeMode
+from settings import *
+
 
 class Player:
-    def __init__(self, x, y):
+    def __init__(self, grid_pos):
 
-        self.x = x
-        self.y = y
+        self.x = grid_pos[0] * TILE_SIZE
+        self.y = grid_pos[1] * TILE_SIZE
 
         # gamemode ativo
         self.mode = CubeMode(self)

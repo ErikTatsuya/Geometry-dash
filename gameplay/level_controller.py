@@ -17,7 +17,7 @@ class LevelController:
             full_path = ASSETS_DIR / bg_path
             self.bg_image = pygame.image.load(str(full_path)).convert()
 
-        self.player = Player(100, 100)
+        self.player = Player(START_POS)
 
     def update(self):
 

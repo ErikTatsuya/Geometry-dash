@@ -13,9 +13,10 @@ CUSTOM_LEVELS = LEVELS_PATH / "custom"
 WIDTH, HEIGHT = 800, 600
 MIDDLE_X, MIDDLE_Y = WIDTH / 2, HEIGHT / 2
 FPS = 60
-TILE_SIZE = 40
-GRAVITY = 0.35
 
+START_POS = (2, 0)  # Posição inicial do jogador em coordenadas de grade (x, y)
+TILE_SIZE = 40
+GRAVITY = 0
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)

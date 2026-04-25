@@ -1,6 +1,5 @@
 import pygame
 from settings import *
-from world.grid import GRID_SIZE
 from .base import BaseMode
 
 class CubeMode(BaseMode):
@@ -8,8 +7,8 @@ class CubeMode(BaseMode):
         self.player = player
 
         self.mini = False
-        self.gravity = 1
-        self.size = GRID_SIZE
+        self.gravity = GRAVITY
+        self.size = TILE_SIZE
 
         self.velocity_y = 0
 
@@ -24,9 +23,9 @@ class CubeMode(BaseMode):
 
     def update_size(self):
         if self.mini:
-            self.size = int(GRID_SIZE * 0.6)
+            self.size = int(TILE_SIZE * 0.6)
         else:
-            self.size = GRID_SIZE
+            self.size = TILE_SIZE
 
         self.scaled_image = pygame.transform.scale(
             self.image, (self.size, self.size)
