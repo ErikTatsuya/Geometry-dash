@@ -14,9 +14,23 @@ WIDTH, HEIGHT = 800, 600
 MIDDLE_X, MIDDLE_Y = WIDTH / 2, HEIGHT / 2
 FPS = 60
 
-START_POS = (2, 0)  # Posição inicial do jogador em coordenadas de grade (x, y)
+'''
+    SISTEMA DE COORDENADAS DO PYGAME É DIFERENTE
+    +y => para baixo
+    -y => para cima
+
+    +x => para direita
+    -x => para esquerda
+'''
+
+START_POS = (2, -5)  # Posição inicial do jogador em coordenadas de grade (x, y)
 TILE_SIZE = 40
-GRAVITY = 0
+GRAVITY = 0.3
+SPEED = 5
+JUMP_POWER = -10
+
+CAMERA_SMOOTHING = 0.1  # Ajuste entre 0.05 (muito lenta) e 1.0 (instantânea)
+CAMERA_OFFSET_X = 200    # Distância do cubo em relação à borda esquerda da tela
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
